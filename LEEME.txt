@@ -1,0 +1,30 @@
+# SportPoint — Prototipo Funcional (Multi-página)
+
+## Cómo abrir el proyecto (elige UNA opción)
+
+### Opción A — La más confiable: servidor local con un clic
+1. Windows: haz doble clic en `iniciar_servidor.bat`
+   Mac/Linux: abre una terminal en esta carpeta y ejecuta `./iniciar_servidor.sh`
+2. Se abrirá tu navegador en `http://localhost:8000/index.html`.
+3. Navega con normalidad. Todo funcionará igual en Chrome, Firefox, Edge, etc.
+4. Para detener el servidor, vuelve a la ventana de la terminal y presiona Ctrl + C.
+
+(Requiere tener Python instalado — la mayoría de PCs de la sala de sistemas de SENA ya lo tienen. Si no aparece nada, instala Python desde python.org o pide ayuda al instructor).
+
+### Opción B — Rápida: abrir directamente con doble clic
+Funciona bien en **Google Chrome** y **Microsoft Edge**. Simplemente haz doble clic en `index.html`.
+
+⚠️ **Firefox bloquea el almacenamiento local (`localStorage`) cuando abres archivos con doble clic** (política de seguridad del navegador, no es un error del proyecto). Si usas Firefox, la página te mostrará un aviso explicando esto — en ese caso usa la Opción A.
+
+## Estructura del proyecto
+- `index.html`, `clubes.html`, `club.html`, `torneos.html`, `torneo.html`, `calendario.html`, `mapa.html`, `noticias.html` → páginas públicas.
+- `panel.html`, `perfil.html`, `mis-inscripciones.html`, `mi-historial.html`, `mis-estadisticas.html`, `mi-club.html`, `plantilla.html`, `mis-torneos.html`, `validacion-clubes.html`, `usuarios.html`, `noticias-admin.html`, `reportes.html`, `mensajes.html` → panel privado según el rol de sesión.
+- `sportpoint.css` / `sportpoint.js` → estilos y lógica compartida por todas las páginas (no los borres ni los muevas).
+
+## Cuentas de prueba (contraseña: 1234)
+- deportista@sportpoint.co
+- club@sportpoint.co
+- organizador@sportpoint.co
+- admin@sportpoint.co
+
+Todos los datos se guardan en el `localStorage` del navegador (simula la base de datos). Si necesitas reiniciar los datos de demo, abre la consola del navegador (F12) y ejecuta: `resetDemo()`

@@ -1,0 +1,339 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ficha del Club — SportPoint</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="sportpoint.css">
+</head>
+<body data-page="mi-club.html">
+  <nav class="navbar navbar-expand-lg sticky-top">
+    <div class="container-fluid px-4">
+      <a class="navbar-brand" href="index.html">Sport<span>Point</span></a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMain">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navMain">
+        <ul class="navbar-nav me-auto ms-lg-4 gap-lg-2">
+          <li class="nav-item"><a class="nav-link" data-page="index.html" href="index.html">Inicio</a></li>
+          <li class="nav-item"><a class="nav-link" data-page="clubes.html" href="clubes.html">Clubes</a></li>
+          <li class="nav-item"><a class="nav-link" data-page="torneos.html" href="torneos.html">Torneos</a></li>
+          <li class="nav-item"><a class="nav-link" data-page="calendario.html" href="calendario.html">Calendario</a></li>
+          <li class="nav-item"><a class="nav-link" data-page="mapa.html" href="mapa.html">Mapa</a></li>
+          <li class="nav-item"><a class="nav-link" data-page="noticias.html" href="noticias.html">Noticias</a></li>
+        </ul>
+        <div class="d-flex align-items-center gap-2" id="navAuthArea"></div>
+      </div>
+    </div>
+  </nav>
+  <div id="appShellWrap" class="container-fluid px-0">
+    <div class="row g-0">
+      <div class="col-12 col-md-3 col-lg-2 sp-sidebar" id="sidebarNav"></div>
+      <div class="col-12 col-md-9 col-lg-10 p-3 p-lg-4" id="privateContent">
+        <div class="text-muted-sp py-5 text-center"><i class="bi bi-hourglass-split fs-1"></i></div>
+      </div>
+    </div>
+  </div>
+  <div class="toast-sp" id="toastArea"></div>
+  <!-- ══════════════ MODAL LOGIN ══════════════ -->
+  <div class="modal fade" id="loginModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content bg-card text-white rounded-xl">
+        <div class="modal-header border-0">
+          <h1 class="font-display fs-2 mb-0"><i class="bi bi-shield-lock me-2 text-green"></i>Iniciar Sesión</h1>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <div class="alert alert-danger py-2 d-none" id="loginError"></div>
+          <div class="mb-3"><label class="form-label">Correo electrónico</label><input class="form-control" type="email" id="loginEmail"></div>
+          <div class="mb-2"><label class="form-label">Contraseña</label><input class="form-control" type="password" id="loginPass"></div>
+          <div class="text-end mb-3"><a href="#" class="small text-green" onclick="switchModal('loginModal','recoverModal');return false;">¿Olvidaste tu contraseña?</a></div>
+          <button class="btn-green-submit w-100" onclick="doLogin()"><i class="bi bi-box-arrow-in-right me-2"></i>Ingresar</button>
+          <div class="text-center mt-3">
+            <small class="text-muted-sp">¿No tienes cuenta? <a href="#" class="text-green" onclick="switchModal('loginModal','registerModal');return false;">Regístrate</a></small>
+          </div>
+          <hr class="border-secondary">
+          <p class="small text-muted-sp mb-1">Cuentas demo (contraseña: <code>1234</code>):</p>
+          <div class="d-flex flex-wrap gap-1">
+            <button class="btn btn-sm btn-sp-outline" onclick="quickLogin('deportista@sportpoint.co')">Deportista</button>
+            <button class="btn btn-sm btn-sp-outline" onclick="quickLogin('club@sportpoint.co')">Admin Club</button>
+            <button class="btn btn-sm btn-sp-outline" onclick="quickLogin('organizador@sportpoint.co')">Organizador</button>
+            <button class="btn btn-sm btn-sp-outline" onclick="quickLogin('admin@sportpoint.co')">Admin Sistema</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ MODAL REGISTRO ══════════════ -->
+  <div class="modal fade" id="registerModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content bg-card text-white rounded-xl">
+        <div class="modal-header border-0">
+          <h1 class="font-display fs-2 mb-0"><i class="bi bi-person-plus me-2 text-green"></i>Crear Cuenta</h1>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <div class="alert alert-danger py-2 d-none" id="regError"></div>
+          <p class="text-center mb-2 small text-muted-sp">¿Cómo quieres usar SportPoint?</p>
+          <div class="d-flex gap-2 mb-3 flex-wrap" id="regRolePills">
+            <button type="button" class="category-pill active flex-fill justify-content-center" data-role="Deportista" onclick="selectRole(this)"><i class="bi bi-person-running"></i> Deportista</button>
+            <button type="button" class="category-pill flex-fill justify-content-center" data-role="Admin. Club" onclick="selectRole(this)"><i class="bi bi-building"></i> Admin. Club</button>
+            <button type="button" class="category-pill flex-fill justify-content-center" data-role="Organizador" onclick="selectRole(this)"><i class="bi bi-trophy"></i> Organizador</button>
+          </div>
+          <div class="mb-3"><label class="form-label required-note">Nombre completo</label><input class="form-control" id="regName"></div>
+          <div class="mb-3"><label class="form-label required-note">Correo electrónico</label><input class="form-control" type="email" id="regEmail"></div>
+          <div class="mb-3"><label class="form-label required-note">Contraseña</label><input class="form-control" type="password" id="regPass"></div>
+          <div class="row g-2 mb-2" id="regDeportistaExtra">
+            <div class="col-7"><label class="form-label required-note">Fecha de nacimiento</label><input class="form-control" type="date" id="regFechaNac"></div>
+            <div class="col-5"><label class="form-label">Documento identidad</label><input class="form-control form-control-sm" type="file" id="regDoc" accept="image/*,.pdf"></div>
+          </div>
+          <p class="small text-muted-sp mb-3" id="regDocHint"><i class="bi bi-camera me-1"></i>Puedes tomar la foto de tu documento directamente desde el celular para verificar tu edad.</p>
+          <button type="button" class="btn-green-submit w-100 mb-3" onclick="doRegister()">
+            <i class="bi bi-person-check me-2"></i>Registrarse Gratis
+          </button>
+          <div class="text-center">
+            <small class="text-muted-sp">¿Ya tienes cuenta? <a href="#" class="text-green" onclick="switchModal('registerModal','loginModal');return false;">Inicia sesión aquí</a></small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ MODAL RECUPERAR CLAVE ══════════════ -->
+  <div class="modal fade" id="recoverModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content bg-card text-white rounded-xl">
+        <div class="modal-header border-0">
+          <h1 class="font-display fs-2 mb-0"><i class="bi bi-key me-2 text-green"></i>Recuperar Contraseña</h1>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body" id="recoverStep1">
+          <p class="text-muted-sp small">Ingresa tu correo y te enviaremos un enlace con un token temporal válido por 15 minutos.</p>
+          <div class="mb-3"><input class="form-control" type="email" id="recoverEmail" placeholder="tu@correo.com"></div>
+          <button class="btn-green-submit w-100" onclick="sendRecovery()"><i class="bi bi-send me-2"></i>Enviar enlace</button>
+        </div>
+        <div class="modal-body d-none" id="recoverStep2">
+          <div class="alert alert-success py-2"><i class="bi bi-check-circle me-1"></i>Enlace simulado enviado. Token: <code id="recoverTokenShow"></code> (expira en <span id="recoverCountdown">15:00</span>)</div>
+          <div class="mb-3"><label class="form-label">Nueva contraseña</label><input class="form-control" type="password" id="recoverNewPass"></div>
+          <button class="btn-green-submit w-100" onclick="confirmRecovery()"><i class="bi bi-check2 me-2"></i>Restablecer contraseña</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ MODAL FICHA DE CLUB ══════════════ -->
+  <div class="modal fade" id="clubFormModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content bg-card text-white rounded-xl">
+        <div class="modal-header border-0">
+          <h1 class="font-display fs-2 mb-0"><i class="bi bi-building me-2 text-green"></i><span id="clubFormTitle">Registrar Club</span></h1>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="clubFormId">
+          <div class="row g-2">
+            <div class="col-md-8"><label class="form-label required-note">Nombre del club</label><input class="form-control" id="cfNombre"></div>
+            <div class="col-md-4"><label class="form-label required-note">Disciplina</label>
+              <select class="form-select" id="cfDisciplina">
+                <option>Fútbol</option><option>Baloncesto</option><option>Voleibol</option><option>Natación</option><option>Ciclismo</option><option>Atletismo</option><option>Tenis</option><option>Patinaje</option>
+              </select>
+            </div>
+            <div class="col-md-6"><label class="form-label required-note">Comuna / Ubicación</label>
+              <select class="form-select" id="cfComuna">
+                <option>Comuna 1 - Popular</option><option>Comuna 4 - Aranjuez</option><option>Comuna 10 - La Candelaria</option><option>Comuna 11 - Laureles-Estadio</option><option>Comuna 14 - Poblado</option><option>Comuna 15 - Guayabal</option><option>Comuna 16 - Belén</option>
+              </select>
+            </div>
+            <div class="col-md-6"><label class="form-label">Dirección de sede</label><input class="form-control" id="cfDireccion"></div>
+            <div class="col-md-6"><label class="form-label">Horarios</label><input class="form-control" id="cfHorarios" placeholder="Lun-Vie 4:00pm-6:00pm"></div>
+            <div class="col-md-6"><label class="form-label">Entrenadores (separados por coma)</label><input class="form-control" id="cfEntrenadores"></div>
+            <div class="col-md-6"><label class="form-label required-note">Cuota mensual (COP)</label><input class="form-control" type="number" id="cfCuota" placeholder="50000"></div>
+            <div class="col-md-6"><label class="form-label">Logo del club</label><input class="form-control" type="file" id="cfLogo" accept="image/*"></div>
+            <div class="col-md-12"><label class="form-label">Documentos institucionales (PDF/imagen, máx. 10MB c/u)</label><input class="form-control" type="file" id="cfDocs" accept="image/*,.pdf" multiple></div>
+          </div>
+          <div class="alert alert-info py-2 mt-3 mb-0 small"><i class="bi bi-info-circle me-1"></i>Tu club quedará en estado <strong>PENDIENTE</strong> hasta que un Administrador del Sistema valide los documentos.</div>
+        </div>
+        <div class="modal-footer border-0">
+          <button class="btn-sp-outline" data-bs-dismiss="modal">Cancelar</button>
+          <button class="btn-green-submit" onclick="saveClubForm()"><i class="bi bi-save me-2"></i>Guardar Club</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ MODAL RECHAZAR CLUB ══════════════ -->
+  <div class="modal fade" id="rejectClubModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content bg-card text-white rounded-xl">
+        <div class="modal-header border-0"><h5 class="mb-0">Motivo de rechazo</h5><button class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div>
+        <div class="modal-body">
+          <input type="hidden" id="rejectClubId">
+          <textarea class="form-control" id="rejectMotivo" rows="3" placeholder="Ej: Documento NIT ilegible, falta certificado..."></textarea>
+        </div>
+        <div class="modal-footer border-0"><button class="btn-sp-danger" onclick="confirmRejectClub()">Rechazar Club</button></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ MODAL TORNEO ══════════════ -->
+  <div class="modal fade" id="torneoFormModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content bg-card text-white rounded-xl">
+        <div class="modal-header border-0">
+          <h1 class="font-display fs-2 mb-0"><i class="bi bi-trophy me-2 text-green"></i>Crear Torneo</h1>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row g-2">
+            <div class="col-md-8"><label class="form-label required-note">Nombre del torneo</label><input class="form-control" id="tfNombre"></div>
+            <div class="col-md-4"><label class="form-label required-note">Disciplina</label>
+              <select class="form-select" id="tfDisciplina"><option>Fútbol</option><option>Baloncesto</option><option>Voleibol</option><option>Natación</option><option>Ciclismo</option><option>Atletismo</option><option>Tenis</option><option>Patinaje</option></select>
+            </div>
+            <div class="col-md-4"><label class="form-label required-note">Categoría de edad</label>
+              <select class="form-select" id="tfCategoria"><option>Sub-12</option><option>Sub-15</option><option>Sub-20</option><option>Abierta</option></select>
+            </div>
+            <div class="col-md-4"><label class="form-label required-note">Fecha inicio</label><input class="form-control" type="date" id="tfFechaInicio"></div>
+            <div class="col-md-4"><label class="form-label required-note">Fecha fin</label><input class="form-control" type="date" id="tfFechaFin"></div>
+            <div class="col-md-6"><label class="form-label">Sede</label><input class="form-control" id="tfSede"></div>
+            <div class="col-md-3"><label class="form-label required-note">Cupo máximo</label><input class="form-control" type="number" id="tfCupo" value="8"></div>
+            <div class="col-md-3"><label class="form-label">Costo inscripción</label><input class="form-control" type="number" id="tfCosto" value="0"></div>
+            <div class="col-md-6"><label class="form-label">Formato</label>
+              <select class="form-select" id="tfFormato"><option value="eliminacion">Eliminación directa (bracket)</option><option value="todos">Todos contra todos</option></select>
+            </div>
+            <div class="col-md-6"><label class="form-label">Patrocinador (nombre)</label><input class="form-control" id="tfPatrocinador" placeholder="Opcional"></div>
+            <div class="col-md-12"><label class="form-label">Reglamento (resumen)</label><textarea class="form-control" id="tfReglamento" rows="2"></textarea></div>
+          </div>
+        </div>
+        <div class="modal-footer border-0">
+          <button class="btn-sp-outline" data-bs-dismiss="modal">Cancelar</button>
+          <button class="btn-green-submit" onclick="saveTorneoForm()"><i class="bi bi-save me-2"></i>Publicar Torneo</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ MODAL RESULTADO PARTIDO ══════════════ -->
+  <div class="modal fade" id="scoreModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content bg-card text-white rounded-xl">
+        <div class="modal-header border-0"><h5 class="mb-0"><i class="bi bi-clipboard-data me-2 text-green"></i>Registrar Marcador</h5><button class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div>
+        <div class="modal-body" id="scoreModalBody"></div>
+        <div class="modal-footer border-0"><button class="btn-green-submit" onclick="confirmScore()">Guardar Resultado</button></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ MODAL RESEÑA ══════════════ -->
+  <div class="modal fade" id="reviewModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content bg-card text-white rounded-xl">
+        <div class="modal-header border-0"><h5 class="mb-0"><i class="bi bi-star me-2 text-green"></i>Calificar Club</h5><button class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div>
+        <div class="modal-body">
+          <input type="hidden" id="reviewClubId">
+          <div class="mb-3 fs-3" id="reviewStars">
+            <i class="bi bi-star star" data-v="1"></i><i class="bi bi-star star" data-v="2"></i><i class="bi bi-star star" data-v="3"></i><i class="bi bi-star star" data-v="4"></i><i class="bi bi-star star" data-v="5"></i>
+          </div>
+          <textarea class="form-control" id="reviewComentario" rows="3" placeholder="Cuéntanos tu experiencia..."></textarea>
+        </div>
+        <div class="modal-footer border-0"><button class="btn-green-submit" onclick="submitReview()">Publicar reseña</button></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ MODAL MENSAJE MASIVO ══════════════ -->
+  <div class="modal fade" id="messageModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content bg-card text-white rounded-xl">
+        <div class="modal-header border-0"><h5 class="mb-0"><i class="bi bi-megaphone me-2 text-green"></i>Mensaje masivo</h5><button class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div>
+        <div class="modal-body">
+          <input type="hidden" id="msgTarget">
+          <p class="small text-muted-sp" id="msgTargetLabel"></p>
+          <textarea class="form-control" id="msgContenido" rows="4" placeholder="Escribe tu mensaje..."></textarea>
+        </div>
+        <div class="modal-footer border-0"><button class="btn-green-submit" onclick="sendMassMessage()">Enviar a todos</button></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ MODAL NOTICIA ══════════════ -->
+  <div class="modal fade" id="noticiaFormModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content bg-card text-white rounded-xl">
+        <div class="modal-header border-0"><h5 class="mb-0"><i class="bi bi-newspaper me-2 text-green"></i>Publicar noticia</h5><button class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div>
+        <div class="modal-body">
+          <div class="mb-2"><input class="form-control" id="nfTitulo" placeholder="Título"></div>
+          <textarea class="form-control" id="nfContenido" rows="4" placeholder="Contenido..."></textarea>
+        </div>
+        <div class="modal-footer border-0"><button class="btn-green-submit" onclick="saveNoticia()">Publicar</button></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ MODAL CAMBIAR ROL (Admin Sistema) ══════════════ -->
+  <div class="modal fade" id="roleModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content bg-card text-white rounded-xl">
+        <div class="modal-header border-0"><h5 class="mb-0">Cambiar rol de usuario</h5><button class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div>
+        <div class="modal-body">
+          <input type="hidden" id="roleUserId">
+          <p class="small text-muted-sp mb-2" id="roleUserLabel"></p>
+          <select class="form-select" id="roleSelect">
+            <option>Deportista</option><option>Admin. Club</option><option>Organizador</option><option>Admin. Sistema</option>
+          </select>
+        </div>
+        <div class="modal-footer border-0"><button class="btn-green-submit" onclick="confirmRoleChange()">Guardar</button></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ MODAL REPORTE (rango de fechas) ══════════════ -->
+  <div class="modal fade" id="reportModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content bg-card text-white rounded-xl">
+        <div class="modal-header border-0"><h5 class="mb-0"><i class="bi bi-file-earmark-bar-graph me-2 text-green"></i>Generar reporte</h5><button class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div>
+        <div class="modal-body">
+          <div class="mb-2"><label class="form-label">Tipo de reporte</label>
+            <select class="form-select" id="repTipo">
+              <option value="clubes">Participación de clubes</option>
+              <option value="torneos">Estadísticas de torneos</option>
+              <option value="inscripciones">Inscripciones</option>
+            </select>
+          </div>
+          <div class="row g-2 mb-2">
+            <div class="col-6"><label class="form-label">Desde</label><input class="form-control" type="date" id="repDesde"></div>
+            <div class="col-6"><label class="form-label">Hasta</label><input class="form-control" type="date" id="repHasta"></div>
+          </div>
+          <label class="form-label">Formato</label>
+          <div class="d-flex gap-2">
+            <button class="btn-sp-outline flex-fill" onclick="generateReport('excel')"><i class="bi bi-file-earmark-excel me-1"></i> Excel (CSV)</button>
+            <button class="btn-sp-outline flex-fill" onclick="generateReport('pdf')"><i class="bi bi-file-earmark-pdf me-1"></i> PDF</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+    crossorigin="anonymous"></script>
+  <script src="sportpoint.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function(){
+      if(!storageAvailable()){
+        document.body.innerHTML = '<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;background:#0d0d0d;color:#f5f5f5;font-family:\'Barlow\',sans-serif;padding:2rem;">\n  <div style="max-width:640px;background:#1a1a1a;border:1px solid #2a2a2a;border-radius:14px;padding:2.2rem;">\n    <h2 style="font-family:\'Bebas Neue\',sans-serif;color:#e0a72b;letter-spacing:1px;">⚠ Este navegador bloquea el almacenamiento local en archivos abiertos con doble clic</h2>\n    <p style="color:#bbb;">SportPoint necesita <code>localStorage</code> para funcionar como base de datos del prototipo. Firefox (y algunos otros navegadores) lo desactivan por seguridad cuando abres archivos directamente desde el disco (<code>file://</code>).</p>\n    <p style="color:#bbb;"><strong>Solución rápida — usa el servidor local incluido:</strong></p>\n    <ol style="color:#bbb;">\n      <li>En la carpeta del proyecto, haz doble clic en <code>iniciar_servidor.bat</code> (Windows) o ejecuta <code>./iniciar_servidor.sh</code> (Mac/Linux).</li>\n      <li>Se abrirá tu navegador en <code>http://localhost:8000</code> — ahí todo funciona sin restricciones.</li>\n    </ol>\n    <p style="color:#bbb;">O más simple: abre estos mismos archivos con <strong>Google Chrome</strong> (ahí sí funciona directamente con doble clic).</p>\n  </div>\n</div>';
+        return;
+      }
+      loadDB();
+      renderAuthArea();
+      renderSidebar();
+      maybeAutoLogin();
+      showFlashIfAny();
+      const u = pageGuard(['Admin. Club']); if(u) renderMiClub(document.getElementById('privateContent'));
+    });
+  </script>
+</body>
+</html>
