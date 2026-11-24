@@ -1,0 +1,82 @@
+@property --fb-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+.frame-border {
+  --fb-bw: 2px;                 /* grosor del borde */
+  --fb-radius: 16px;
+  --fb-grad: linear-gradient(135deg, #b6ffd0, #1db954 30%, #148a3d 60%, #5df08c);
+  position: relative;
+  border-radius: var(--fb-radius);
+  isolation: isolate;
+}
+
+/* ── anillo (el borde en sí) ── */
+.frame-border::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: var(--fb-bw);
+  background: var(--fb-grad);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+  pointer-events: none;
+  z-index: 3;
+}
+
+/* ── glow difuminado ── */
+.frame-border::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: 0 0 26px 2px rgba(29, 185, 84, .45);
+  opacity: 0;
+  transition: opacity .25s;
+  pointer-events: none;
+  z-index: -1;
+}
+.frame-border:hover::before { opacity: 1; }
+
+/* ── variantes ── */
+.frame-border--card > * {
+  display: block;
+  height: 100%;
+  border-color: transparent !important;
+  border-radius: calc(var(--fb-radius) - 2px) !important;
+}
+.frame-border--page { --fb-radius: 20px; padding: 1.25rem; }
+.frame-border--page::before { opacity: .55; }
+.frame-border--modal { --fb-radius: 18px; width: 100%; pointer-events: auto; }
+.frame-border--modal > .modal-content { border: none; }
+
+/* ── intro: el borde se dibuja al cargar ── */
+.frame-border--intro::after { animation: fb-draw 1.6s cubic-bezier(.22, .8, .3, 1) both; }
+.frame-border--intro::before { animation: fb-glow 1.6s ease-out both; }
+/* el contenido NUNCA se oculta con animación: solo el borde se dibuja */
+
+@keyframes fb-draw {
+  0%   { clip-path: inset(0 50% calc(100% - 3px) 50%); opacity: 0; }
+  12%  { opacity: 1; }
+  45%  { clip-path: inset(0 0 calc(100% - 3px) 0); }
+  100% { clip-path: inset(0 0 0 0); opacity: 1; }
+}
+@keyframes fb-glow {
+  0%   { opacity: 0; }
+  45%  { opacity: .9; }
+  100% { opacity: .55; }
+}
+
+/* ── degradado giratorio opcional ── */
+.frame-border--spin { --fb-grad: conic-gradient(from var(--fb-angle), #5df08c, #148a3d, #1db954, #b6ffd0, #5df08c); }
+.frame-border--spin::after { animation: fb-spin 6s linear infinite; }
+.frame-border--spin.frame-border--intro::after { animation: fb-draw 1.6s cubic-bezier(.22, .8, .3, 1) both, fb-spin 6s linear infinite; }
+@keyframes fb-spin { to { --fb-angle: 360deg; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .frame-border::after, .frame-border::before { animation: none !important; }
+}
