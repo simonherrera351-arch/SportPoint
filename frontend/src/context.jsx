@@ -27,12 +27,15 @@ export function AppProvider({ children }) {
     api.get('/auth/me').then(setUser).catch(() => setToken(null)).finally(() => setLoading(false))
   }, [])
 
+<<<<<<< HEAD
   useEffect(() => {
     const h = () => { setUser(null); toast('Tu sesión venció. Inicia sesión de nuevo.', 'info') }
     window.addEventListener('sp:unauthorized', h)
     return () => window.removeEventListener('sp:unauthorized', h)
   }, [toast])
 
+=======
+>>>>>>> 4155370e60c404ada4d166ac5eb9ee390cf14054
   const startSession = useCallback(({ token, user: u }) => {
     setToken(token)
     setUser(u)

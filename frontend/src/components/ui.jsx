@@ -1,6 +1,9 @@
 import { Link } from 'react-router-dom'
 import { fmtDate, fmtMoney } from '../utils'
+<<<<<<< HEAD
 import FrameBorder from './FrameBorder'
+=======
+>>>>>>> 4155370e60c404ada4d166ac5eb9ee390cf14054
 
 const BADGES = { Aprobado: 'aprobado', Pendiente: 'pendiente', Rechazado: 'rechazado', Abierto: 'abierto', Cerrado: 'cerrado', 'En curso': 'curso', Finalizado: 'finalizado', activo: 'activo' }
 
@@ -29,7 +32,10 @@ export const Kpi = ({ value, label, col = 'col-md-4' }) => (
 
 export const ClubCard = ({ c }) => (
   <div className="col-md-4">
+<<<<<<< HEAD
     <FrameBorder className="h-100">
+=======
+>>>>>>> 4155370e60c404ada4d166ac5eb9ee390cf14054
     <Link to={`/clubes/${c.id}`} className="club-card h-100 d-block text-white text-decoration-none">
       <div className="card-cover"><i className="bi bi-shield-fill-check" /></div>
       <div className="p-3">
@@ -45,7 +51,10 @@ export const ClubCard = ({ c }) => (
           : <p className="small text-muted-sp mb-0">Sin reseñas aún</p>}
       </div>
     </Link>
+<<<<<<< HEAD
     </FrameBorder>
+=======
+>>>>>>> 4155370e60c404ada4d166ac5eb9ee390cf14054
   </div>
 )
 
@@ -53,7 +62,10 @@ export const TorneoCard = ({ t }) => {
   const left = t.cupo - t.cuposOcupados
   return (
     <div className="col-md-4">
+<<<<<<< HEAD
       <FrameBorder className="h-100">
+=======
+>>>>>>> 4155370e60c404ada4d166ac5eb9ee390cf14054
       <Link to={`/torneos/${t.id}`} className="torneo-card h-100 d-block text-white text-decoration-none">
         <div className="card-cover"><i className="bi bi-trophy-fill" /></div>
         <div className="p-3">
@@ -68,7 +80,10 @@ export const TorneoCard = ({ t }) => {
           </p>
         </div>
       </Link>
+<<<<<<< HEAD
       </FrameBorder>
+=======
+>>>>>>> 4155370e60c404ada4d166ac5eb9ee390cf14054
     </div>
   )
 }

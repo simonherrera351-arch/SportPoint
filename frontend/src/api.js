@@ -16,10 +16,14 @@ async function request(method, path, body) {
   let data = null
   try { data = await res.json() } catch { /* sin cuerpo */ }
   if (!res.ok) {
+<<<<<<< HEAD
     if (res.status === 401 && token) { // sesión vencida: avisar a la app para que cierre sesión
       setToken(null)
       window.dispatchEvent(new Event('sp:unauthorized'))
     }
+=======
+    if (res.status === 401 && token) setToken(null) // sesión vencida
+>>>>>>> 4155370e60c404ada4d166ac5eb9ee390cf14054
     const detail = data && data.detail
     throw new ApiError(typeof detail === 'string' ? detail : 'Ocurrió un error. Intenta de nuevo.', res.status)
   }

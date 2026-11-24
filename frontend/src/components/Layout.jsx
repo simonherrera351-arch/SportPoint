@@ -1,5 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
+<<<<<<< HEAD
 import FrameBorder from './FrameBorder'
+=======
+>>>>>>> 4155370e60c404ada4d166ac5eb9ee390cf14054
 import { Link, NavLink, Navigate, Outlet, useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { api } from '../api'
 import { useApp } from '../context'
@@ -155,7 +158,11 @@ export function PublicLayout() {
   return (
     <>
       <Navbar />
+<<<<<<< HEAD
       <div className="px-4 px-lg-5 py-4"><FrameBorder key={pathname} variant="page" intro><Outlet /></FrameBorder></div>
+=======
+      <div className="px-4 px-lg-5 py-4"><Outlet /></div>
+>>>>>>> 4155370e60c404ada4d166ac5eb9ee390cf14054
       <Footer />
       <AuthModals />
     </>
@@ -195,7 +202,11 @@ export function PrivateLayout() {
       <div className="container-fluid px-0">
         <div className="row g-0">
           <Sidebar />
+<<<<<<< HEAD
           <div className="col-12 col-md-9 col-lg-10 p-3 p-lg-4"><FrameBorder key={pathname} variant="page" intro><Outlet /></FrameBorder></div>
+=======
+          <div className="col-12 col-md-9 col-lg-10 p-3 p-lg-4"><Outlet /></div>
+>>>>>>> 4155370e60c404ada4d166ac5eb9ee390cf14054
         </div>
       </div>
       <Footer />
